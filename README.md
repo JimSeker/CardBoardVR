@@ -1,5 +1,5 @@
 # CardBoardVR
-These examples are for Android's CardBoard.  They are built with AndroidStudio in java.<BR>
+These examples are for Android's CardBoard.  They are built with AndroidStudio in java. For more information see https://developers.google.com/cardboard<BR>
 
 <b>CardBoardSample</b> is Google's example code, but setup for studio correctly.<BR>
 
