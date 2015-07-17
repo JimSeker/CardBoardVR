@@ -27,14 +27,13 @@ public class myStereoRenderer implements CardboardView.StereoRenderer{
     private static final float CAMERA_Z = 0.01f;
 
     public Cube mCube;
-    public Cube mCube2;
     public Floor mFloor;
 
     private float objectDistance = 6f;
     private float floorDepth = 20f;
 
-    private float[] mRotationMatrix;
-    private float[] mRotationMatrixCube2;
+    private float[]  CubeMatrix0, CubeMatrix1, CubeMatrix2, CubeMatrix3;
+    private float[]  CubeMatrix4, CubeMatrix5, CubeMatrix6, CubeMatrix7;
     private float[] camera;
     private float[] view;
     private float[] headView;
@@ -112,9 +111,15 @@ public class myStereoRenderer implements CardboardView.StereoRenderer{
     public void onNewFrame(HeadTransform headTransform) {
 
         //rotate the cube, mangle is how fast, x,y,z which directions it rotates.
-        Matrix.rotateM(mRotationMatrix, 0, mAngle, 0.7f, 0.7f, 1.0f);
+        Matrix.rotateM(CubeMatrix0, 0, mAngle, 0.7f, 0.7f, 1.0f);
         //rotate cube2, mangle is how fast, x,y,z which directions it rotates.
-        Matrix.rotateM(mRotationMatrixCube2, 0, -mAngle, 1.0f, 0.5f, 0.5f);
+        Matrix.rotateM(CubeMatrix1, 0, -mAngle, 0.7f, 0.7f, 1.0f);
+        Matrix.rotateM(CubeMatrix2, 0, mAngle, 1.0f, 0.7f, 0.7f);
+        Matrix.rotateM(CubeMatrix3, 0, -mAngle, 1.0f, 0.7f, 0.7f);
+        Matrix.rotateM(CubeMatrix4, 0, mAngle, 0.7f, 1.0f, 0.7f);
+        Matrix.rotateM(CubeMatrix5, 0, -mAngle, 0.7f, 1.0f, 0.7f);
+        Matrix.rotateM(CubeMatrix6, 0, mAngle, 0.5f, 0.5f, 1.5f);
+        Matrix.rotateM(CubeMatrix7, 0, -mAngle, 0.5f, 0.5f, 1.5f);
 
         // Build the camera matrix and apply it to the ModelView.
         Matrix.setLookAtM(camera, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
@@ -142,7 +147,7 @@ public class myStereoRenderer implements CardboardView.StereoRenderer{
         Matrix.multiplyMV(lightPosInEyeSpace, 0, view, 0, LIGHT_POS_IN_WORLD_SPACE, 0);
 
         // combine the model with the view matrix to create the modelview matreix
-        Matrix.multiplyMM(modelview, 0, view, 0, mRotationMatrix, 0);
+        Matrix.multiplyMM(modelview, 0, view, 0, CubeMatrix0, 0);
 
         // combine the model-view with the projection matrix
         float[] perspective = eye.getPerspective(Z_NEAR, Z_FAR);
@@ -153,15 +158,33 @@ public class myStereoRenderer implements CardboardView.StereoRenderer{
 
         //now create the mvp matrix for cube2 and then draw it.
         // combine the model with the view matrix to create the modelview matreix
-        Matrix.multiplyMM(modelview, 0, view, 0, mRotationMatrixCube2, 0);
+        Matrix.multiplyMM(modelview, 0, view, 0, CubeMatrix1, 0);
 
         // combine the model-view with the projection matrix
         Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, modelview, 0);
-        mCube2.draw(mMVPMatrix);
+        mCube.draw(mMVPMatrix);
+        //now the next 5
+        Matrix.multiplyMM(modelview, 0, view, 0, CubeMatrix2, 0);
+        Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, modelview, 0);
+        mCube.draw(mMVPMatrix);
+        Matrix.multiplyMM(modelview, 0, view, 0, CubeMatrix3, 0);
+        Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, modelview, 0);
+        mCube.draw(mMVPMatrix);
+        Matrix.multiplyMM(modelview, 0, view, 0, CubeMatrix4, 0);
+        Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, modelview, 0);
+        mCube.draw(mMVPMatrix);
+        Matrix.multiplyMM(modelview, 0, view, 0, CubeMatrix5, 0);
+        Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, modelview, 0);
+        mCube.draw(mMVPMatrix);
+        Matrix.multiplyMM(modelview, 0, view, 0, CubeMatrix6, 0);
+        Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, modelview, 0);
+        mCube.draw(mMVPMatrix);
+        Matrix.multiplyMM(modelview, 0, view, 0, CubeMatrix7, 0);
+        Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, modelview, 0);
+        mCube.draw(mMVPMatrix);
 
         //now calculate for the floor
         Matrix.multiplyMM(modelview, 0, view, 0, modelFloor, 0);
-
         // combine the model-view with the projection matrix
         Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, modelview, 0);
         mFloor.drawFloor(mMVPMatrix, modelFloor, modelview, lightPosInEyeSpace);
@@ -179,8 +202,14 @@ public class myStereoRenderer implements CardboardView.StereoRenderer{
 
     @Override
     public void onSurfaceCreated(EGLConfig eglConfig) {
-        mRotationMatrix = new float[16];
-        mRotationMatrixCube2 = new float[16];
+        CubeMatrix0 = new float[16];
+        CubeMatrix1 = new float[16];
+        CubeMatrix2 = new float[16];
+        CubeMatrix3 = new float[16];
+        CubeMatrix4 = new float[16];
+        CubeMatrix5 = new float[16];
+        CubeMatrix6 = new float[16];
+        CubeMatrix7 = new float[16];
         camera = new float[16];
         view = new float[16];
         mMVPMatrix = new float[16];
@@ -191,15 +220,31 @@ public class myStereoRenderer implements CardboardView.StereoRenderer{
         GLES30.glClearColor(0.1f, 0.1f, 0.1f, 0.5f); // Dark background so text shows up well.
         //initialize the cube code for drawing.
         mCube = new Cube();
-        // Object first appears directly in front of user.
-        Matrix.setIdentityM(mRotationMatrix, 0);
-        Matrix.translateM(mRotationMatrix, 0, 0, 0, -objectDistance);
-        //Don't think I need cube2, but I need to matrix to place the second cube.
-        mCube2 = new Cube();
-        Matrix.setIdentityM(mRotationMatrixCube2, 0);
-        //                                         X      Y  Z
-        Matrix.translateM(mRotationMatrixCube2, 0, -2.0f, 0, -objectDistance);
-
+        // Object first appears directly in front of user.  In front
+        Matrix.setIdentityM(CubeMatrix0, 0);
+        //                                X  Y  Z
+        Matrix.translateM(CubeMatrix0, 0, 0, 0, -objectDistance);
+        //front left
+        Matrix.setIdentityM(CubeMatrix1, 0);
+        Matrix.translateM(CubeMatrix1, 0, -objectDistance, 0, -objectDistance);
+        //front right
+        Matrix.setIdentityM(CubeMatrix2, 0);
+        Matrix.translateM(CubeMatrix2, 0, objectDistance, 0, -objectDistance);
+        //left
+        Matrix.setIdentityM(CubeMatrix3, 0);
+        Matrix.translateM(CubeMatrix3, 0, -objectDistance, 0, 0);
+        //right
+        Matrix.setIdentityM(CubeMatrix4, 0);
+        Matrix.translateM(CubeMatrix4, 0, objectDistance, 0, 0);
+        //back
+        Matrix.setIdentityM(CubeMatrix5, 0);
+        Matrix.translateM(CubeMatrix5, 0, 0, 0, objectDistance);
+        //back left
+        Matrix.setIdentityM(CubeMatrix6, 0);
+        Matrix.translateM(CubeMatrix6, 0, -objectDistance, 0, objectDistance);
+        //back right
+        Matrix.setIdentityM(CubeMatrix7, 0);
+        Matrix.translateM(CubeMatrix7, 0, objectDistance, 0, objectDistance);
         //floor object
         mFloor = new Floor();
         Matrix.setIdentityM(modelFloor, 0);
