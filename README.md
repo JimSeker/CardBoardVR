@@ -7,4 +7,6 @@ These examples are for Android's CardBoard.  They are built with AndroidStudio i
 
 <b>FloatingCubes</b> is based on FloatCube, except there are 8 cubes, which each turn differently.  Included the Floor code from CardBardSample in Floor.java with the necessary parameters from the renderer are send to the draw function.  Since GLES30 is backward compatible to 2.0, no changes where made to the shader/vertex code.
 
+<b>FlyingAroundACube</b> is based on FloatingCube.  When you "click/touch" you will move (mostly) in the direction the phone is facing.
+
 These are example code for University of Wyoming, Cosc 4730 Mobile Programming course.  All examples are for Android.
