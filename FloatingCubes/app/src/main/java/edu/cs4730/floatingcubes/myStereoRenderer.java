@@ -27,6 +27,7 @@ public class myStereoRenderer implements CardboardView.StereoRenderer{
     private static final float CAMERA_Z = 0.01f;
 
     public Cube mCube;
+    public Pyramid mPyramid;
     public Floor mFloor;
 
     private float objectDistance = 6f;
@@ -162,11 +163,11 @@ public class myStereoRenderer implements CardboardView.StereoRenderer{
 
         // combine the model-view with the projection matrix
         Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, modelview, 0);
-        mCube.draw(mMVPMatrix);
+        mPyramid.draw(mMVPMatrix);
         //now the next 5
         Matrix.multiplyMM(modelview, 0, view, 0, CubeMatrix2, 0);
         Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, modelview, 0);
-        mCube.draw(mMVPMatrix);
+        mPyramid.draw(mMVPMatrix);
         Matrix.multiplyMM(modelview, 0, view, 0, CubeMatrix3, 0);
         Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, modelview, 0);
         mCube.draw(mMVPMatrix);
@@ -178,10 +179,10 @@ public class myStereoRenderer implements CardboardView.StereoRenderer{
         mCube.draw(mMVPMatrix);
         Matrix.multiplyMM(modelview, 0, view, 0, CubeMatrix6, 0);
         Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, modelview, 0);
-        mCube.draw(mMVPMatrix);
+        mPyramid.draw(mMVPMatrix);
         Matrix.multiplyMM(modelview, 0, view, 0, CubeMatrix7, 0);
         Matrix.multiplyMM(mMVPMatrix, 0, perspective, 0, modelview, 0);
-        mCube.draw(mMVPMatrix);
+        mPyramid.draw(mMVPMatrix);
 
         //now calculate for the floor
         Matrix.multiplyMM(modelview, 0, view, 0, modelFloor, 0);
@@ -220,6 +221,8 @@ public class myStereoRenderer implements CardboardView.StereoRenderer{
         GLES30.glClearColor(0.1f, 0.1f, 0.1f, 0.5f); // Dark background so text shows up well.
         //initialize the cube code for drawing.
         mCube = new Cube();
+        mPyramid = new Pyramid();
+
         // Object first appears directly in front of user.  In front
         Matrix.setIdentityM(CubeMatrix0, 0);
         //                                X  Y  Z

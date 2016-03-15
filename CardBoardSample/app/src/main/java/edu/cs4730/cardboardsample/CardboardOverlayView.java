@@ -43,7 +43,7 @@ public class CardboardOverlayView extends LinearLayout {
     setOrientation(HORIZONTAL);
 
     LayoutParams params = new LayoutParams(
-      LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f);
+            LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f);
     params.setMargins(0, 0, 0, 0);
 
     leftView = new CardboardOverlayEyeView(context, attrs);
@@ -172,15 +172,15 @@ public class CardboardOverlayView extends LinearLayout {
       float leftMargin = (int) (width * (imageMargin + adjustedOffset));
       float topMargin = (int) (height * (imageMargin + verticalImageOffset));
       imageView.layout(
-        (int) leftMargin, (int) topMargin,
-        (int) (leftMargin + width * imageSize), (int) (topMargin + height * imageSize));
+              (int) leftMargin, (int) topMargin,
+              (int) (leftMargin + width * imageSize), (int) (topMargin + height * imageSize));
 
       // Layout TextView
       leftMargin = adjustedOffset * width;
       topMargin = height * verticalTextPos;
       textView.layout(
-        (int) leftMargin, (int) topMargin,
-        (int) (leftMargin + width), (int) (topMargin + height * (1.0f - verticalTextPos)));
+              (int) leftMargin, (int) topMargin,
+              (int) (leftMargin + width), (int) (topMargin + height * (1.0f - verticalTextPos)));
     }
   }
 }
