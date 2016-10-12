@@ -1,11 +1,11 @@
 package edu.cs4730.cardboardsample;
 
-import com.google.vrtoolkit.cardboard.CardboardActivity;
-import com.google.vrtoolkit.cardboard.CardboardView;
-import com.google.vrtoolkit.cardboard.Eye;
-import com.google.vrtoolkit.cardboard.HeadTransform;
-import com.google.vrtoolkit.cardboard.Viewport;
-import com.google.vrtoolkit.cardboard.audio.CardboardAudioEngine;
+import com.google.vr.sdk.base.GvrActivity;
+import com.google.vr.sdk.base.GvrView;
+import com.google.vr.sdk.base.Eye;
+import com.google.vr.sdk.base.HeadTransform;
+import com.google.vr.sdk.base.Viewport;
+import com.google.vr.sdk.audio.GvrAudioEngine;
 
 import android.content.Context;
 import android.opengl.GLES20;
@@ -27,7 +27,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 /**
  * A Cardboard sample application.
  */
-public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer {
+public class MainActivity extends GvrActivity implements GvrView.StereoRenderer {
 
     private static final String TAG = "MainActivity";
 
@@ -43,7 +43,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private static final int COORDS_PER_VERTEX = 3;
 
     // We keep the light always position just above the user.
-    private static final float[] LIGHT_POS_IN_WORLD_SPACE = new float[] {0.0f, 2.0f, 0.0f, 1.0f};
+    private static final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 2.0f, 0.0f, 1.0f};
 
     private static final float MIN_MODEL_DISTANCE = 3.0f;
     private static final float MAX_MODEL_DISTANCE = 7.0f;
@@ -98,13 +98,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private Vibrator vibrator;
     private CardboardOverlayView overlayView;
 
-    private CardboardAudioEngine cardboardAudioEngine;
-    private volatile int soundId = CardboardAudioEngine.INVALID_ID;
+    private GvrAudioEngine gvrAudioEngine;
+    private volatile int sourceId = GvrAudioEngine.INVALID_ID;
+    private volatile int successSourceId = GvrAudioEngine.INVALID_ID;
 
     /**
      * Converts a raw text file, saved as a resource, into an OpenGL ES shader.
      *
-     * @param type The type of shader we will be creating.
+     * @param type  The type of shader we will be creating.
      * @param resId The resource ID of the raw text file about to be turned into a shader.
      * @return The shader object handler.
      */
@@ -154,10 +155,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.common_ui);
-        CardboardView cardboardView = (CardboardView) findViewById(R.id.cardboard_view);
-        cardboardView.setRestoreGLStateEnabled(false);
-        cardboardView.setRenderer(this);
-        setCardboardView(cardboardView);
+        GvrView gvrView = (GvrView) findViewById(R.id.cardboard_view);
+        gvrView.setEGLConfigChooser(8, 8, 8, 8, 16, 8);
+        gvrView.setTransitionViewEnabled(true);
+        gvrView.setRenderer(this);
+        setGvrView(gvrView);
 
         modelCube = new float[16];
         camera = new float[16];
@@ -166,7 +168,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         modelView = new float[16];
         modelFloor = new float[16];
         // Model first appears directly in front of user.
-        modelPosition = new float[] {0.0f, 0.0f, -MAX_MODEL_DISTANCE / 2.0f};
+        modelPosition = new float[]{0.0f, 0.0f, -MAX_MODEL_DISTANCE / 2.0f};
         headRotation = new float[4];
         headView = new float[16];
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -175,20 +177,19 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         overlayView.show3DToast("Pull the magnet when you find an object.");
 
         // Initialize 3D audio engine.
-        cardboardAudioEngine =
-                new CardboardAudioEngine(getAssets(), CardboardAudioEngine.RenderingQuality.HIGH);
+        gvrAudioEngine = new GvrAudioEngine(this, GvrAudioEngine.RenderingMode.BINAURAL_HIGH_QUALITY);
     }
 
     @Override
     public void onPause() {
-        cardboardAudioEngine.pause();
+        gvrAudioEngine.pause();
         super.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        cardboardAudioEngine.resume();
+        gvrAudioEngine.resume();
     }
 
     @Override
@@ -203,7 +204,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     /**
      * Creates the buffers we use to store information about the 3D world.
-     *
+     * <p>
      * <p>OpenGL doesn't use Java arrays, but rather needs data in a format it can understand.
      * Hence we use ByteBuffers.
      *
@@ -318,11 +319,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                         // Start spatial audio playback of SOUND_FILE at the model postion. The returned
                         //soundId handle is stored and allows for repositioning the sound object whenever
                         // the cube position changes.
-                        cardboardAudioEngine.preloadSoundFile(SOUND_FILE);
-                        soundId = cardboardAudioEngine.createSoundObject(SOUND_FILE);
-                        cardboardAudioEngine.setSoundObjectPosition(
-                                soundId, modelPosition[0], modelPosition[1], modelPosition[2]);
-                        cardboardAudioEngine.playSound(soundId, true /* looped playback */);
+                        gvrAudioEngine.preloadSoundFile(SOUND_FILE);
+                        sourceId = gvrAudioEngine.createSoundObject(SOUND_FILE);
+                        gvrAudioEngine.setSoundObjectPosition(
+                                sourceId, modelPosition[0], modelPosition[1], modelPosition[2]);
+                        gvrAudioEngine.playSound(sourceId, true /* looped playback */);
                     }
                 })
                 .start();
@@ -340,9 +341,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         Matrix.translateM(modelCube, 0, modelPosition[0], modelPosition[1], modelPosition[2]);
 
         // Update the sound location to match it with the new cube position.
-        if (soundId != CardboardAudioEngine.INVALID_ID) {
-            cardboardAudioEngine.setSoundObjectPosition(
-                    soundId, modelPosition[0], modelPosition[1], modelPosition[2]);
+        if (sourceId != gvrAudioEngine.INVALID_ID) {
+            gvrAudioEngine.setSoundObjectPosition(
+                    sourceId, modelPosition[0], modelPosition[1], modelPosition[2]);
         }
         checkGLError("updateCubePosition");
     }
@@ -387,7 +388,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         // Update the 3d audio engine with the most recent head rotation.
         headTransform.getQuaternion(headRotation, 0);
-        cardboardAudioEngine.setHeadRotation(
+        gvrAudioEngine.setHeadRotation(
                 headRotation[0], headRotation[1], headRotation[2], headRotation[3]);
 
         checkGLError("onReadyToDraw");
@@ -425,11 +426,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     @Override
-    public void onFinishFrame(Viewport viewport) {}
+    public void onFinishFrame(Viewport viewport) {
+    }
 
     /**
      * Draw the cube.
-     *
+     * <p>
      * <p>We've set all of our transformation matrices. Now we simply pass them into the shader.
      */
     public void drawCube() {
@@ -461,7 +463,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     /**
      * Draw the floor.
-     *
+     * <p>
      * <p>This feeds in data for the floor into the shader. Note that this doesn't feed in data about
      * position of the light, so if we rewrite our code to draw the floor first, the lighting might
      * look strange.
@@ -505,7 +507,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     /**
      * Find a new random position for the object.
-     *
+     * <p>
      * <p>We'll rotate it around the Y-axis so it's out of sight, and then up or down by a little bit.
      */
     private void hideObject() {
