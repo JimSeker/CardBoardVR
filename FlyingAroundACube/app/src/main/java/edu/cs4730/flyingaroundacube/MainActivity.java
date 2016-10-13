@@ -5,15 +5,15 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
 
-import com.google.vrtoolkit.cardboard.CardboardActivity;
-import com.google.vrtoolkit.cardboard.CardboardView;
+import com.google.vr.sdk.base.GvrActivity;
+import com.google.vr.sdk.base.GvrView;
 
 /*
  * This example separates the activity from the renderer so it is easier to figure what
  * is the activity part (like the trigger) versa the renderer code.
  */
 
-public class MainActivity extends CardboardActivity {
+public class MainActivity extends GvrActivity {
 
     private Vibrator vibrator;
     private CardboardOverlayView overlayView;
@@ -26,10 +26,10 @@ public class MainActivity extends CardboardActivity {
         setContentView(R.layout.common_ui);
 
         //setup the cardbardview and set the renderer for it.
-        CardboardView cardboardView = (CardboardView) findViewById(R.id.cardboard_view);
+        GvrView gvrView = (GvrView) findViewById(R.id.cardboard_view);
         mStereoRenderer = new myStereoRenderer();
-        cardboardView.setRenderer(mStereoRenderer);
-        setCardboardView(cardboardView);
+        gvrView.setRenderer(mStereoRenderer);
+        setGvrView(gvrView);
 
         //this is overlay code from google, that allows us to put text on the "screen" easily.
         overlayView = (CardboardOverlayView) findViewById(R.id.overlay);

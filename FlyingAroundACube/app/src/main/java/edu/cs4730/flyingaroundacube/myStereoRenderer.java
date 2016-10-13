@@ -4,10 +4,10 @@ import android.opengl.GLES30;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.google.vrtoolkit.cardboard.CardboardView;
-import com.google.vrtoolkit.cardboard.Eye;
-import com.google.vrtoolkit.cardboard.HeadTransform;
-import com.google.vrtoolkit.cardboard.Viewport;
+import com.google.vr.sdk.base.GvrView;
+import com.google.vr.sdk.base.Eye;
+import com.google.vr.sdk.base.HeadTransform;
+import com.google.vr.sdk.base.Viewport;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -17,7 +17,7 @@ import javax.microedition.khronos.egl.EGLConfig;
  * The cube and mycolor code is unchanged from the opengl30Cube example.
  *
  */
-public class myStereoRenderer implements CardboardView.StereoRenderer{
+public class myStereoRenderer implements GvrView.StereoRenderer{
     private static String TAG = "StereoRenderer";
     private float mAngle = 0.4f;  //spin of the cube.
     private float mSpeed = 0.03f;  //speed of move
