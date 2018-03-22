@@ -8,7 +8,21 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <uses-feature
-        android:glEsVersion="0x00030000"
+        android:name="android.software.vr.mode"
+        android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.vr.high_performance"
+        android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.sensor.gyroscope"
+        android:required="true"/>
+
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
         android:required="true"/>
 
     <application
@@ -18,8 +32,9 @@
 
         <activity
             android:name=".MainActivity"
-
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:resizeableActivity="false"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -37,8 +52,22 @@
 
         <activity
             android:name=".DayDreamActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="landscape">
+            android:configChanges="density|keyboardHidden|navigation|orientation|screenSize|uiMode"
+            android:enableVrMode="@string/gvr_vr_mode_component"
+            android:resizeableActivity="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/VrActivityTheme">
+            <intent-filter>
+                <!-- This marks the Activity as a Daydream Activity and allows it
+     to be launched from the Daydream Home. -->
+                <category android:name="com.google.intent.category.DAYDREAM"/>
+
+                <!-- This allows this Activity to be launched from the traditional
+                     Android 2D launcher as well. Remove it if you do not want
+                     this Activity to be launched directly from the 2D launcher. -->
+                <category android:name="android.intent.category.LAUNCHER"/>
+
+            </intent-filter>
         </activity>
     </application>
 

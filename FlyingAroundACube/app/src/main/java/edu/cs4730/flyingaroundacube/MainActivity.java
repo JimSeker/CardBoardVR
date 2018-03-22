@@ -1,21 +1,16 @@
 package edu.cs4730.flyingaroundacube;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.util.Log;
 import android.view.View;
-
-import com.google.vr.sdk.base.GvrActivity;
-import com.google.vr.sdk.base.GvrView;
 
 /*
  * This example separates the activity from the renderer so it is easier to figure what
  * is the activity part (like the trigger) versa the renderer code.
  */
 
-public class MainActivity extends GvrActivity {
+public class MainActivity extends Activity {
 
    String TAG = "MainActivity";
 
@@ -41,6 +36,7 @@ public class MainActivity extends GvrActivity {
                 // Set the request code to any code you like, you can identify the
                 // callback via this code
                 startActivity(intent);
+                //daydreamApi.
             }
         });
     }
