@@ -106,8 +106,8 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 27 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="com.google.vr:sdk-base-1.130.0" level="project" />
     <orderEntry type="library" name="com.google.protobuf.nano:protobuf-javanano:3.1.0@jar" level="project" />
-    <orderEntry type="library" name="com.google.vr:sdk-base-1.101.0" level="project" />
-    <orderEntry type="library" name="com.google.vr:sdk-common-1.101.0" level="project" />
+    <orderEntry type="library" name="com.google.vr:sdk-common-1.130.0" level="project" />
   </component>
 </module>
