@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "edu.cs4730.daydreamcontrollerdemo"
         minSdkVersion 24
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
@@ -22,7 +22,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //implementation 'com.google.vr:sdk-common:1.130.0'
     implementation 'com.google.vr:sdk-base:1.190.0'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     //compile 'com.google.vr:sdk-base:1.130.0'
     //compile 'com.google.vr:sdk-controller:1.130.0'
 }
