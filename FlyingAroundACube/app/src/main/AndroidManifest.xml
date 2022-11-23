@@ -32,7 +32,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
+            android:exported="true"
             android:resizeableActivity="false"
             android:screenOrientation="landscape">
             <intent-filter>
@@ -44,7 +44,8 @@
         <activity
             android:name=".CardBoardActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:exported="true">
             <intent-filter>
                 <category android:name="com.google.intent.category.CARDBOARD"/>
             </intent-filter>
@@ -56,7 +57,8 @@
             android:enableVrMode="@string/gvr_vr_mode_component"
             android:resizeableActivity="false"
             android:screenOrientation="landscape"
-            android:theme="@style/VrActivityTheme">
+            android:theme="@style/VrActivityTheme"
+            android:exported="true">
             <intent-filter>
                 <!-- This marks the Activity as a Daydream Activity and allows it
      to be launched from the Daydream Home. -->
