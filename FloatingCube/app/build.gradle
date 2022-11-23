@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "edu.cs4730.floatingcube"
-        minSdkVersion 19
+        minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
