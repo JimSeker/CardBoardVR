@@ -2,7 +2,7 @@
 These examples are for Android's CardBoard.  
 
 
-<B>Note: There's a new open source Cardboard SDK for iOS and Android NDK that offers a streamlined API, improved device compatibility, and built-in viewer profile QR code scanning.  As of Nov 6, 2019.  So all ones below are deprecated.  When I get some time, work on replacements, but in 2022, I still can't get these to work.  thanks google. https://developers.google.com/cardboard/develop </b>
+<B>Note: There's a new open source Cardboard SDK for iOS and Android NDK that offers a streamlined API, improved device compatibility, and built-in viewer profile QR code scanning.  As of Nov 6, 2019.  So all ones below are deprecated.  When I get some time, work on replacements, but in 2022, I still can't get these to work.  thanks google. https://developers.google.com/cardboard/develop   as of Sept 2026, even the libraries are removed, so they don't compile anymore.</b>
 
 They are built with AndroidStudio in java. For more information see https://developers.google.com/cardboard and their repo as well https://github.com/googlevr/gvr-android-sdk/ <BR>
 
